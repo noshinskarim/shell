@@ -29,12 +29,15 @@ unzip -q rawdata.zip
 
 # 1. Create a directory named data
 mkdir data
+
 # 2. Move the ./rawdata directory to ./data/raw
 mv "./rawdata" "./data/raw"
+
 # 3. List the contents of the ./data/raw directory
 cd data
 ls 
 pwd
+
 # 4. In ./data/processed, create the following directories: server_logs, user_logs, and event_logs
 mkdir processed 
 cd processed
@@ -49,11 +52,45 @@ for file in ./*; do
     cp "$file" "../processed/server_logs"
   fi
 done
+
 # 6. Repeat the above step for user logs and event logs
+for file in ./*; do
+  if [[ "$file" == *user* && "$file" == *.log ]]; then
+    cp "$file" "../processed/user_logs"
+  fi
+done
+
+for file in ./*; do
+  if [[ "$file" == *event* && "$file" == *.log ]]; then
+    cp "$file" "../processed/event_logs"
+  fi
+done
 
 # 7. For user privacy, remove all files containing IP addresses (files with "ipaddr" in the filename) from ./data/raw and ./data/processed/user_logs
+for file in ./*; do
+  if [[ "$file" == *ipaddr* ]]; then
+    rm "$file" 
+  fi
+done
+
+directory="../processed/user_logs"
+for file in "$directory"/*; do
+  if [[ "$file" == *ipaddr* ]]; then
+    rm "$file" 
+  fi
+done
+pwd 
 
 # 8. Create a file named ./data/inventory.txt that lists all the files in the subfolders of ./data/processed
+
+directory="../processed"
+for file in "$directory"/*; do 
+  cd "$directory/$file"
+  a = ls
+  touch "inventory.txt"
+  echo >> "inventory.txt"
+done
+
 
 
 ###########################################
