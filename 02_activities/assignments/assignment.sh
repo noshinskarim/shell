@@ -35,7 +35,7 @@ mv "./rawdata" "./data/raw"
 
 # 3. List the contents of the ./data/raw directory
 cd data
-ls 
+ls data
 pwd
 
 # 4. In ./data/processed, create the following directories: server_logs, user_logs, and event_logs
@@ -74,7 +74,7 @@ for file in ./*; do
 done
 
 directory="../processed/user_logs"
-for file in "$directory"/*; do
+for file in $directory/*; do
   if [[ "$file" == *ipaddr* ]]; then
     rm "$file" 
   fi
@@ -83,14 +83,17 @@ pwd
 
 # 8. Create a file named ./data/inventory.txt that lists all the files in the subfolders of ./data/processed
 
-directory="../processed"
-for file in "$directory"/*; do 
-  cd "$directory/$file"
-  a = ls
-  touch "inventory.txt"
-  echo >> "inventory.txt"
-done
+cd "../"
+touch inventory.txt
 
+for folder in ./processed/*; do
+  if [ -d "$folder" ]; then
+    # Loop through all files in each subfolder
+    for file in "$folder"/*; do
+      echo "$file" >> inventory.txt
+    done
+  fi
+done
 
 
 ###########################################
